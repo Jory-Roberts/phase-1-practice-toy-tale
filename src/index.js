@@ -32,7 +32,7 @@ getToy = () => {
     .then((res) => res.json())
     .then((data) => {
       let toyCollection = document.querySelector("#toy-collection");
-      console.log(toyCollection);
+      // console.log(toyCollection);
 
       data.forEach((toy) => {
         const card = document.createElement("div");
@@ -65,6 +65,16 @@ getToy = () => {
 
 console.log(getToy());
 
-toyLikes = (toy) => {};
+submitToyForm = (e) => {
+  e.preventDefault();
 
-createToys = (toy) => {};
+  const name = document.querySelector('input[type="text"]').value;
+  const image = document.querySelectorAll('input[type="image"]')
+  console.log("this is name", name);
+  console.log(image);
+};
+toyForm.addEventListener("submit", submitToyForm);
+
+console.log(submitToyForm);
+
+toyLikes = (toy) => {};
