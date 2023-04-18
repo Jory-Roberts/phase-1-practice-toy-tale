@@ -65,16 +65,31 @@ getToy = () => {
 
 console.log(getToy());
 
-submitToyForm = (e) => {
-  e.preventDefault();
 
-  const name = document.querySelector('input[type="text"]').value;
-  const image = document.querySelectorAll('input[type="image"]')
+postToy = (e) => {
+  
+
+  const name = document.querySelector('input[name="name"]').value;
+  const image = document.querySelector('input[name="image"]').value;
   console.log("this is name", name);
-  console.log(image);
+  console.log("this is image", image);
+
+  fetch("http://localhost:3000/toys", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({ name, image, likes: 0 }),
+  })
+    .then((res) => res.json())
+    .catch((error) => {
+      console.error("Error adding toy:", error);
+    });
 };
-toyForm.addEventListener("submit", submitToyForm);
 
-console.log(submitToyForm);
+toyForm.addEventListener("submit", postToy);
 
-toyLikes = (toy) => {};
+console.log(postToy);
+
+toyLikes = () => {};
