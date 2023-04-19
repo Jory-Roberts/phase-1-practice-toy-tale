@@ -3,12 +3,12 @@ Deliverables:
 1. Add toy info to the card
 2. add a new toy POST request
 3.increase toy's likes
-
 */
 
 let addToy = false;
 
 document.addEventListener("DOMContentLoaded", () => {
+  addingEventListeners();
   const addBtn = document.querySelector("#new-toy-btn");
   const toyFormContainer = document.querySelector(".container");
   addBtn.addEventListener("click", () => {
@@ -27,7 +27,11 @@ console.log(addBtn);
 const toyForm = document.querySelector(".container");
 console.log(toyForm);
 
-getToy = () => {
+addingEventListeners = () => {
+  toyForm.addEventListener("submit", postToy);
+};
+
+const getToy = () => {
   return fetch("http://localhost:3000/toys")
     .then((res) => res.json())
     .then((data) => {
@@ -65,10 +69,7 @@ getToy = () => {
 
 console.log(getToy());
 
-
-postToy = (e) => {
-  
-
+const postToy = (e) => {
   const name = document.querySelector('input[name="name"]').value;
   const image = document.querySelector('input[name="image"]').value;
   console.log("this is name", name);
@@ -88,8 +89,26 @@ postToy = (e) => {
     });
 };
 
-toyForm.addEventListener("submit", postToy);
-
 console.log(postToy);
-
-toyLikes = () => {};
+/*
+finish implementation of updateToyLikes
+add event listener to like button
+update db.json with likes for each toy
+*/
+const updateToyLikes = (Id, likes) => {
+  fetch(`http://localhost:3000/toys/'${Id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({ likes }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Likes updated", data);
+    })
+    .catch((error) => {
+      console.error("Error updating likes", error);
+    });
+};
