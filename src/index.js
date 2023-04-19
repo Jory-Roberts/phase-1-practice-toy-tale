@@ -76,20 +76,20 @@ const getToy = () => {
     });
 };
 
-console.log(getToy());
+getToy();
 
 const postToy = (e) => {
   const name = document.querySelector('input[name="name"]').value;
   const image = document.querySelector('input[name="image"]').value;
-  console.log("this is name", name);
-  console.log("this is image", image);
+  // console.log("this is name", name);
+  //  console.log("this is image", image);
 
-  // const urlRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/gi;
+  const urlRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/gi;
 
-  // if (!urlRegex.test(image)) {
-  //   alert("Please enter a valid image URL.")
-  //   return;
-  // }
+  if (!urlRegex.test(image)) {
+    alert("Please enter a valid image URL.");
+    return;
+  }
 
   fetch("http://localhost:3000/toys", {
     method: "POST",
