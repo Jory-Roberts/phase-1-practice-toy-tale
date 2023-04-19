@@ -30,66 +30,65 @@ console.log(toyForm);
 addingEventListeners = () => {
   toyForm.addEventListener("submit", postToy);
 };
+const renderToy = (toy) => {
+  let toyCollection = document.querySelector("#toy-collection");
+
+  const card = document.createElement("div");
+  card.classList.add("card");
+  // console.log(card)
+
+  const name = document.createElement("h2");
+  name.textContent = toy.name;
+  // console.log(name)
+
+  const image = document.createElement("img");
+  image.src = toy.image;
+  image.classList.add("toy-avatar");
+  // console.log(image)
+
+  const likes = document.createElement("p");
+  likes.textContent = `Likes: ${toy.likes}`;
+
+  const likeBtn = document.createElement("button");
+  likeBtn.classList.add("like-btn");
+  likeBtn.id = toy.id;
+  likeBtn.textContent = "Like";
+  likeBtn.addEventListener("click", () => {
+    toy.likes++;
+
+    likes.textContent = `Likes: ${toy.likes}`;
+    //console.log(`Likes value: ${likes}` )
+    updateToyLikes(toy.id, toy.likes);
+  });
+
+  card.appendChild(name);
+  card.appendChild(image);
+  card.appendChild(likes);
+  card.appendChild(likeBtn);
+
+  toyCollection.appendChild(card);
+};
 
 const getToy = () => {
   return fetch("http://localhost:3000/toys")
     .then((res) => res.json())
     .then((data) => {
-      let toyCollection = document.querySelector("#toy-collection");
       // console.log(toyCollection);
 
-      data.forEach((toy) => {
-        const card = document.createElement("div");
-        card.classList.add("card");
-        // console.log(card)
-
-        const name = document.createElement("h2");
-        name.textContent = toy.name;
-        // console.log(name)
-
-        const image = document.createElement("img");
-        image.src = toy.image;
-        image.classList.add("toy-avatar");
-        // console.log(image)
-
-        const likes = document.createElement("p");
-        likes.textContent = `Likes: ${toy.likes}`;
-
-        const likeBtn = document.createElement("button");
-        likeBtn.classList.add("like-btn");
-        likeBtn.id = toy.id;
-        likeBtn.textContent = "Like";
-        likeBtn.addEventListener("click", () => {
-          toy.likes++;
-          likes.textContent = `Likes: ${toy.likes}`;
-          //console.log(`Likes value: ${likes}` )
-          updateToyLikes(toy.id, toy.likes);
-        });
-
-        card.appendChild(name);
-        card.appendChild(image);
-        card.appendChild(likes);
-        card.appendChild(likeBtn);
-
-        toyCollection.appendChild(card);
-      });
+      data.forEach(renderToy);
     });
 };
 
 getToy();
 
 const postToy = (e) => {
-  const name = document.querySelector('input[name="name"]').value;
-  const image = document.querySelector('input[name="image"]').value;
+  e.preventDefault();
+  const formData = Object.fromEntries(new FormData(e.target));
+  // const name = document.querySelector('input[name="name"]').value;
+  // const image = document.querySelector('input[name="image"]').value;
   // console.log("this is name", name);
   //  console.log("this is image", image);
-
-  const urlRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/gi;
-
-  if (!urlRegex.test(image)) {
-    alert("Please enter a valid image URL.");
-    return;
-  }
+  console.log(formData);
 
   fetch("http://localhost:3000/toys", {
     method: "POST",
@@ -97,15 +96,16 @@ const postToy = (e) => {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-    body: JSON.stringify({ name, image, likes: 0 }),
+    body: JSON.stringify({ ...formData, likes: 0 }),
   })
     .then((res) => res.json())
-    .then((data) => {
-      updateToyLikes(data.id, data.likes);
+    .then((toy) => {
+      renderToy(toy);
     })
     .catch((error) => {
       console.error("Error adding toy:", error);
     });
+  console.log("hello");
 };
 
 console.log(postToy);
