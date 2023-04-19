@@ -30,21 +30,19 @@ console.log(toyForm);
 addingEventListeners = () => {
   toyForm.addEventListener("submit", postToy);
 };
+
 const renderToy = (toy) => {
   let toyCollection = document.querySelector("#toy-collection");
 
   const card = document.createElement("div");
   card.classList.add("card");
-  // console.log(card)
 
   const name = document.createElement("h2");
   name.textContent = toy.name;
-  // console.log(name)
 
   const image = document.createElement("img");
   image.src = toy.image;
   image.classList.add("toy-avatar");
-  // console.log(image)
 
   const likes = document.createElement("p");
   likes.textContent = `Likes: ${toy.likes}`;
@@ -57,7 +55,6 @@ const renderToy = (toy) => {
     toy.likes++;
 
     likes.textContent = `Likes: ${toy.likes}`;
-    //console.log(`Likes value: ${likes}` )
     updateToyLikes(toy.id, toy.likes);
   });
 
@@ -73,8 +70,6 @@ const getToy = () => {
   return fetch("http://localhost:3000/toys")
     .then((res) => res.json())
     .then((data) => {
-      // console.log(toyCollection);
-
       data.forEach(renderToy);
     });
 };
@@ -84,10 +79,6 @@ getToy();
 const postToy = (e) => {
   e.preventDefault();
   const formData = Object.fromEntries(new FormData(e.target));
-  // const name = document.querySelector('input[name="name"]').value;
-  // const image = document.querySelector('input[name="image"]').value;
-  // console.log("this is name", name);
-  //  console.log("this is image", image);
   console.log(formData);
 
   fetch("http://localhost:3000/toys", {
@@ -105,17 +96,10 @@ const postToy = (e) => {
     .catch((error) => {
       console.error("Error adding toy:", error);
     });
-  console.log("hello");
 };
 
 console.log(postToy);
-/*
-finish implementation of updateToyLikes
-add event listener to like button
-update db.json with likes for each toy
-*/
 
-// Function to update toy likes
 const updateToyLikes = (toyId, likes) => {
   fetch(`http://localhost:3000/toys/${toyId}`, {
     method: "PATCH",
